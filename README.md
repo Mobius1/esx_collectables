@@ -117,6 +117,12 @@ Setting `Config.Debug` to `true` renders blips to show the location of collectab
 
 * Coming soon...
 
+## Contributing
+Pull requests welcome.
+
+## To Do
+* Add UI menu to allow players to check progress of collectables
+
 ## Legal
 
 ### License
