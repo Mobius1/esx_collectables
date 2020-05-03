@@ -8,27 +8,6 @@ Config.DrawDistance = 500
 Config.PlaceCollectables = true
 
 Config.Collectables = {
-    -- LostSpanners = {
-    --     Enabled = true,
-    --     ID = 'lost_spanners',
-    --     Prop = 'prop_tool_adjspanner',
-    --     Blip = {
-    --         ID = 402,
-    --         Color = 50,
-    --         Scale = 1.0,
-    --     },
-    --     Items = {
-    --         {
-    --             ID = "Lost Spanner 1",
-    --             Pos = vector3(-535.95, 3560.64, 237.60)
-    --         },
-    --         {
-    --             ID = "Lost Spanner 2",
-    --             Pos = vector3(-535.27, 3558.18, 237.64)
-    --         },
-    --     }  
-    -- },
-
     LetterScraps = {
         Enabled = true,
         ID = 'letter_scraps',
