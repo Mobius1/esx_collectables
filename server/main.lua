@@ -72,7 +72,7 @@ function SetCollected(Type, _Collected)
     end
 end
 
-ESX.RegisterServerCallback('esx_collectables:collected', function(source, cb, _collectable, Type, Group)
+ESX.RegisterServerCallback('esx_collectables:collected', function(source, cb, Collectable, Type, Group)
     local xPlayer = ESX.GetPlayerFromId(source)
 
     MySQL.Async.execute('UPDATE user_collectables SET ' .. Group.ID .. ' = @' .. Group.ID, {
@@ -80,14 +80,15 @@ ESX.RegisterServerCallback('esx_collectables:collected', function(source, cb, _c
         ['@' .. Group.ID] = json.encode(Group.Collected),
     }, function(changed)
 
+        Completed = false
         if #Group.Collected == #Config.Collectables[Type].Items then
             Completed = true
         end
 
-        TriggerEvent("esx_collectables:itemCollected", xPlayer, _collectable, Group)
+        TriggerEvent("esx_collectables:itemCollected", xPlayer, Collectable, Group)
 
         if Completed then
-            TriggerEvent("esx_collectables:completed", source, xPlayer, _collectable, Group)
+            TriggerEvent("esCollectables:completed", source, xPlayer, Collectable, Group)
         end
 
         cb(true, Type, Completed)

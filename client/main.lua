@@ -51,7 +51,6 @@ function EnableCollectable(Type)
                 for i = 1, ItemsCount do
                     local Item = Collection.Items[i]
                     local dist = #(Item.Pos - Player.Pos) 
-                    
 
                     -- Add debug blip
                     if Config.Debug and not Item.Blip and not Item.Collected then
