@@ -55,7 +55,7 @@ function EnableCollectable(Type)
 
                     -- Add debug blip
                     if Config.Debug and not Item.Blip and not Item.Collected then
-                        AddDebugBlip(Item, Collection.Blip, _U(Collection.ID .. '_title'))
+                        AddDebugBlip(Item, Collection.Blip, Collection.ID)
                     end
                     
                     Item.InRange = false
