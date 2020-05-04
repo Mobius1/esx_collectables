@@ -10,7 +10,6 @@ Enable collectable items on an ESX-enabled FiveM server.
 
 ## Requirements
 
-* [fivem-mysql-async](https://github.com/brouznouf/fivem-mysql-async)
 * [es_extended](https://github.com/ESX-Org/es_extended)
 
 ## Download & Installation
