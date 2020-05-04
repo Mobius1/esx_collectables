@@ -6,7 +6,7 @@ description 'ESX Collectables'
 
 author 'Karl Saunders'
 
-version '1.0.1'
+version '1.0.5'
 
 server_scripts {
     '@async/async.lua',

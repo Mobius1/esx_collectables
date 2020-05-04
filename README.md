@@ -10,6 +10,7 @@ Enable collectable items on an ESX-enabled FiveM server.
 
 ## Requirements
 
+* [fivem-mysql-async](https://github.com/brouznouf/fivem-mysql-async)
 * [es_extended](https://github.com/ESX-Org/es_extended)
 
 ## Download & Installation
@@ -102,7 +103,7 @@ LostSpanners = {
 A list of Blip IDs can be found [here](https://wiki.gtanet.work/index.php?title=Blips) and a list of props [here](https://pastebin.com/2BdvLA4R).
 
 ## Performance
-To reduce load, the package only renders the collectable and performs any logic on it when it is in range of the player. You can adjust the range with `Config.DrawDistance` in `config.lua`. Default is `50`.
+To reduce load, the package only renders the collectable and performs any logic on it when it is in range of the player. You can adjust the range with `Config.DrawDistance` in `config.lua`. Default is `50`. NOTE: If you have the draw distance set at a high value then items may not spawn on the surface they're supposed to on due to collisions not being loaded at great distances.
 
 ## Development Options
 Setting `Config.Debug` to `true` renders blips to show the location of collectables and render some debug text to the screen to help with development. The package is written to allow it to be restarted properly with `restart esx_collectables` in the console.

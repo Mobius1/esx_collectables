@@ -4,6 +4,7 @@ Ready = false
 Player = {}
 Collected = {}
 Collectables = {}
+Active = {}
 
 Citizen.CreateThread(function()
     while ESX == nil do
@@ -42,32 +43,63 @@ Citizen.CreateThread(function()
     end
 end)
 
+-- Only get items in range of player so later check only has a small table to check
+Citizen.CreateThread(function()
+    while true do
+        if Ready then
+            for k, v in pairs(Collectables) do
+                -- Reset active table
+                Active[k] = {}
+
+                local ItemsCount = #v.Items
+                for i = 1, ItemsCount do
+                    local Item = v.Items[i]
+
+                    if not Item.Collected then
+
+                        -- Add debug blip
+                        if Config.Debug and not Item.Blip then
+                            AddDebugBlip(Item, v.Blip, v.Title)
+                        end                       
+
+                        local dist = #(Item.Pos - Player.Pos)                     
+
+                        -- Add item to active table
+                        if dist < Config.DrawDistance then
+                            Item.InRange = true
+                            table.insert(Active[k], Item)       
+                        end
+                    end
+                end
+            end
+        end
+        Citizen.Wait(5000)
+    end
+end)
+
 function EnableCollectable(Type)
-    local Collection = Collectables[Type]
-    local ItemsCount = #Collection.Items
+
+    Active[Type] = {}
+
+    -- Check the active table
     Citizen.CreateThread(function()
         while true do
-            if Ready and not Collection.Completed then
+            if Ready and not Collectables[Type].Completed then
+                local Collection = Active[Type]
+                local ItemsCount = #Collection
                 for i = 1, ItemsCount do
-                    local Item = Collection.Items[i]
-                    local dist = #(Item.Pos - Player.Pos) 
+                    local Item = Collection[i]
 
-                    -- Add debug blip
-                    if Config.Debug and not Item.Blip and not Item.Collected then
-                        AddDebugBlip(Item, Collection.Blip, Collection.Title)
-                    end
-                    
-                    Item.InRange = false
+                    if not Item.Collected then
+                        local dist = #(Item.Pos - Player.Pos) 
 
-                    -- Only do checks if player is in range
-                    if dist < Config.DrawDistance then
-                        if not Item.Collected then
-                            Item.InRange = true
-                            -- spawn entity when player is in range
-                            if not Item.Spawned then
-                                SpawnItem(Item, Collection.Prop)
-                            end         
+                        -- spawn entity when player is in range
+                        if not Item.Spawned then
+                            SpawnItem(Item, Collectables[Type].Prop)
+                        end                            
 
+                        -- Only do checks if player is in range
+                        if dist < Config.DrawDistance then
                             -- Only do collisions check if player is really close to collectable
                             if dist < 5 then
                                 -- check if player has collided with collectable
@@ -75,7 +107,7 @@ function EnableCollectable(Type)
                                     -- Trigger collection
                                     CollectItem(Item, Type)
                                 end               
-                            end               
+                            end
                         end
                     end
                 end
@@ -109,7 +141,7 @@ function SpawnItem(item, prop)
     item.Collected = false
 
     ESX.Game.SpawnLocalObject(prop, item.Pos, function(entity)
-        if Config.PlaceCollectables and not item.fixed then
+        if Config.PlaceCollectables and item.Fixed == nil then
             PlaceObjectOnGroundProperly(entity)
         end
         FreezeEntityPosition(entity, true)
