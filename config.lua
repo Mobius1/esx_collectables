@@ -3,7 +3,7 @@ Config = {}
 Config.Locale = 'en'
 
 Config.Enabled = true
-Config.Debug = true
+Config.Debug = false
 Config.DrawDistance = 500
 Config.PlaceCollectables = true
 
