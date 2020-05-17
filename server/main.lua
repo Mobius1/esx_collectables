@@ -75,7 +75,7 @@ end
 ESX.RegisterServerCallback('esx_collectables:collected', function(source, cb, Collectable, Type, Group)
     local xPlayer = ESX.GetPlayerFromId(source)
 
-    MySQL.Async.execute('UPDATE user_collectables SET ' .. Group.ID .. ' = @' .. Group.ID, {
+    MySQL.Async.execute('UPDATE user_collectables SET ' .. Group.ID .. ' = @' .. Group.ID .. ' WHERE identifier = @identifier', {
         ['@identifier'] = xPlayer.identifier,
         ['@' .. Group.ID] = json.encode(Group.Collected),
     }, function(changed)
