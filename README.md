@@ -5,7 +5,7 @@ Enable collectable items on an ESX-enabled FiveM server.
 
 ## Features
 * Enable hidden collectables from the single player experience (Letter Scraps, Spaceship Parts, etc)
-* Enable players to earn money / XP for finding collectables
+* Enable players to earn moneyfor finding and completing collectables
 * Add your own custom collectables
 
 ## Requirements
@@ -26,6 +26,25 @@ Collectables are spawned locally so are only visible to the local player. This m
 
 ## Placing Collectables
 By default, the resource places the collectable prop on the ground properly. If you want the prop to be set at it's z-coord defined in `config.lua` then set `Config.PlaceCollectables` to `false`.
+
+## Rewarding Players
+Players can be rewarded with cash for finding each collectable and for finding all collectables in a group. Just add the `Rewards` table to the group's config in `config.lua`:
+
+```lua
+Config.Collectables = {
+    LetterScraps = {
+        Enabled = true,
+        ID = 'letter_scraps',
+        Prop = 'prop_ld_scrap',      
+        Rewards = {
+            PerItem = 50,           -- Cash reward per item found
+            Completed = 5000        -- Cash reward for all items found
+        },
+        ...
+    }
+    ...
+}
+```
 
 ## Available Server Events
 
@@ -77,10 +96,14 @@ LostSpanners = {
     Enabled = true,                                     -- enable / disable the collectables
     ID = 'lost_spanners',                               -- the ID used for the MySQL database column
     Prop = 'prop_tool_adjspanner',                      -- the prop to spawn for the player to collect
+    Rewards = {
+        PerItem = 50,                                   -- Cash reward per item found
+        Completed = 5000                                -- Cash reward for all items found
+    },
     Blip = {
-        ID = 402,                                       -- blip ID
-        Color = 50,                                     -- blip color ID
-        Scale = 1.0,                                    -- blip scale / size
+        ID = 402,                                       -- debug blip ID
+        Color = 50,                                     -- debug blip color ID
+        Scale = 1.0,                                    -- debug blip scale / size
     },
     Items = {                                           -- Collectable items list
         {
