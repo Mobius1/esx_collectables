@@ -75,19 +75,32 @@ end
 ESX.RegisterServerCallback('esx_collectables:collected', function(source, cb, Collectable, Type, Group)
     local xPlayer = ESX.GetPlayerFromId(source)
 
-    MySQL.Async.execute('UPDATE user_collectables SET ' .. Group.ID .. ' = @' .. Group.ID .. ' WHERE identifier = @identifier', {
+    MySQL.Async.execute('UPDATE user_collectables SET ' .. Group.ID .. ' = @group WHERE identifier = @identifier', {
         ['@identifier'] = xPlayer.identifier,
-        ['@' .. Group.ID] = json.encode(Group.Collected),
+        ['@group'] = json.encode(Group.Collected),
     }, function(changed)
+
+        local Rewards = false
+
+        if Config.Collectables[Type].Rewards ~= nil and #Config.Collectables[Type].Rewards then
+            Rewards = true
+        end
 
         Completed = false
         if #Group.Collected == #Config.Collectables[Type].Items then
             Completed = true
         end
 
+        if Rewards then
+            RewardPlayer(xPlayer, Config.Collectables[Type].Rewards.PerItem)
+        end
+
         TriggerEvent("esx_collectables:itemCollected", xPlayer, Collectable, Group)
 
         if Completed then
+            if Rewards then
+                RewardPlayer(xPlayer, Config.Collectables[Type].Rewards.Completed)
+            end
             TriggerEvent("esCollectables:completed", source, xPlayer, Collectable, Group)
         end
 

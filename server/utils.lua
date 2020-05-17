@@ -12,3 +12,9 @@ function SnakeToWord(str)
     end
     return table.concat(w, ' ')
 end
+
+function RewardPlayer(xPlayer, Reward)
+    if Reward ~= nil and tonumber(Reward) ~= nil then
+        xPlayer.addMoney(math.floor(Reward))
+    end
+end
