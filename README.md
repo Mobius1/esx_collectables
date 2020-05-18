@@ -5,7 +5,9 @@ Enable collectable items on an ESX-enabled FiveM server.
 
 ## Features
 * Enable hidden collectables from the single player experience (Letter Scraps, Spaceship Parts, etc)
-* Enable players to earn moneyfor finding and completing collectables
+* Enable players to earn money for finding and completing collectables
+* Menu to track progress of quests
+* Allow players to reset quest progress
 * Add your own custom collectables
 
 ## Requirements
