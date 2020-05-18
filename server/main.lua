@@ -107,3 +107,41 @@ ESX.RegisterServerCallback('esx_collectables:collected', function(source, cb, Co
         cb(true, Type, Completed)
     end)
 end)
+
+-- Reset player progress
+ESX.RegisterServerCallback('esx_collectables:reset', function(source, cb, group)
+    local xPlayer = ESX.GetPlayerFromId(source)
+
+
+    MySQL.Async.execute('UPDATE user_collectables SET ' .. group.ID .. ' = @group WHERE identifier = @identifier', {
+        ['@identifier'] = xPlayer.identifier,
+        ['@group'] = json.encode({}),
+    }, function(changed)
+
+        local Total = 0
+
+        -- Remove earned money to prevent player spamming collectables to build money up
+        if group.Rewards ~= nil then
+            -- Remove money for each item found
+            if group.Rewards.PerItem ~= nil and tonumber(group.Rewards.PerItem) ~= nil then
+                local Money = #group.Collected * group.Rewards.PerItem
+                xPlayer.removeMoney(math.floor(Money))
+
+                Total = Total + Money
+            end
+
+            -- Remove money for completing quest
+            if group.Completed then
+                if group.Rewards.Completed ~= nil and tonumber(group.Rewards.Completed) ~= nil then
+                    xPlayer.removeMoney(math.floor(group.Rewards.Completed))
+
+                    Total = Total + group.Rewards.Completed
+                end
+            end
+        end
+
+        TriggerEvent("esx_collectables:resetProgress", xPlayer, Collectable, Group, Total)
+
+        cb(true, Total)
+    end)
+end)

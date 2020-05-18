@@ -7,6 +7,9 @@ Config.Debug = false
 Config.DrawDistance = 50
 Config.PlaceCollectables = true
 
+Config.MenuKey = 207
+Config.MenuPosition = 'top-left'
+
 Config.Collectables = {
     LetterScraps = {
         Enabled = true,

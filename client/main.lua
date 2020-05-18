@@ -2,7 +2,6 @@ ESX = nil
 Ready = false
 
 Player = {}
-Collected = {}
 Collectables = {}
 Active = {}
 
@@ -217,6 +216,94 @@ function RemoveItems()
             end
         end   
     end 
+end
+
+-- Menu thread
+Citizen.CreateThread(function()
+    while true do
+        if Ready then
+            if IsControlJustReleased(0, Config.MenuKey) then
+                OpenMenu()
+            end
+        end
+
+        Citizen.Wait(0)
+    end
+end)
+
+function OpenMenu()								
+    local Resource = GetCurrentResourceName()
+    local Elements = {}
+
+    for k, v in pairs(Collectables) do
+        local Total = #v.Items
+        local Collected = #v.Collected
+        table.insert(Elements,  {
+            label = ('%s <span class="menu-item--count">%s/%s</span>'):format(v.Title, Collected, Total),
+            value = v.ID,
+            title = v.Title,
+            total = Total,
+            collected = Collected,
+            type = k
+        })
+    end
+
+    ESX.UI.Menu.CloseAll()		
+    
+    ESX.UI.Menu.Open(
+        'default', Resource, 'progress',
+        {
+            title       = _U('menu_title'),
+            align       = Config.MenuPosition,
+            elements    = Elements
+        },
+        function(data, menu)
+            -- ESX.ShowNotification(data.current.value)
+            ESX.UI.Menu.Open('default', Resource, data.current.value, {
+                title = ('%s (%s)'):format(data.current.title, data.current.total),
+                align = Config.MenuPosition,
+                elements = {
+                    {label = ('%s <span class="menu-item--count">%s</span>'):format('Collected', data.current.collected),  value = 'collected'},
+                    {label = "<span class='menu-item--danger'>Reset Progress</span>",  value = 'reset'},
+            }}, function(data2, menu2)
+                if data2.current.value == 'reset' then
+                    ESX.UI.Menu.Open('default', Resource, data2.current.value, {
+                        title       = _U('menu_reset'),
+                        align       = Config.MenuPosition,
+                        elements    = {
+                                        {label = _U('menu_no'),  value = 'no'},
+                                        {label = ("<span class='menu-item--danger'>%s</span>"):format(_U('menu_yes')), value = 'yes'}
+                                    }
+                    }, function(data3, menu3)
+                        if data3.current.value == 'yes' then
+                            ESX.TriggerServerCallback('esx_collectables:reset', function(success, total)
+                                if success then
+                                    if total > 0 then
+                                        ESX.ShowNotification(_U('money_removed', total))
+                                    end
+
+                                    ESX.UI.Menu.CloseAll()
+
+                                    RemoveItems()
+                                    Wait(500)
+                                    InitCollectables()	
+                                end
+                            end, Collectables[data.current.type])
+                        end
+
+                        menu3.close()
+                    end, function(data3, menu3)
+                        menu3.close()
+                    end)
+                end
+            end, function(data2, menu2)
+                menu2.close()
+            end)
+        end,
+        function(data, menu)
+            menu.close()
+        end
+    )
 end
 
 -- Restart
