@@ -40,7 +40,7 @@ Config.Collectables = {
         Prop = 'prop_ld_scrap',      
         Rewards = {
             PerItem = 50,           -- Cash reward per item found
-            Completed = 5000        -- Cash reward for all items found
+            Completed = 50000        -- Cash reward for all items found
         },
         ...
     }
