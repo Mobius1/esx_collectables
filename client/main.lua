@@ -148,6 +148,16 @@ end
 
 function DespawnItem(item)
     ESX.Game.DeleteObject(item.Entity)
+
+    -- Remove debug blip
+    if item.Blip ~= nil then
+        if DoesBlipExist(item.Blip) then
+            SetBlipAsMissionCreatorBlip(item.Blip,false)
+            RemoveBlip(item.Blip)
+            item.Blip = nil
+        end
+    end    
+
     item.Spawned = false    
     item.InRange = false    
 end
@@ -168,14 +178,6 @@ function CollectItem(item, type)
             DespawnItem(item)
 
             Collectable.Completed = _completed
-            -- Remove debug blip
-            if Config.Debug then
-                if DoesBlipExist(item.Blip) then
-                    SetBlipAsMissionCreatorBlip(item.Blip,false)
-                    RemoveBlip(item.Blip)
-                    item.Blip = nil
-                end
-            end
 
             -- play sound
             PlaySoundFrontend(-1, "PICK_UP", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
