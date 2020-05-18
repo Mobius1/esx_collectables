@@ -100,13 +100,10 @@ function EnableCollectable(Type)
                         -- Only do checks if player is in range
                         if dist < Config.DrawDistance then
                             -- Only do collisions check if player is really close to collectable
-                            if dist < 5 then
-                                -- check if player has collided with collectable
-                                if IsEntityTouchingEntity(Player.Ped, Item.Entity) then
-                                    -- Trigger collection
-                                    CollectItem(Item, Type)
-                                end               
-                            end
+                            if dist < 1 then
+                                -- Trigger collection
+                                CollectItem(Item, Type)
+                            end               
                         end
                     end
                 end
