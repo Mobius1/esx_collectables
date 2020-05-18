@@ -1,7 +1,7 @@
 # esx_collectables
 Enable collectable items on an ESX-enabled FiveM server. 
 
-![Demo Image 1](https://i.imgur.com/QEmZH7Z.gif)
+![Demo Image 1](https://i.imgur.com/f1nD7Ap.gif)
 
 ## Features
 * Enable hidden collectables from the single player experience (Letter Scraps, Spaceship Parts, etc)
