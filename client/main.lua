@@ -236,7 +236,7 @@ function OpenMenu()
         local Total = #v.Items
         local Collected = #v.Collected
         table.insert(Elements,  {
-            label = ('%s <span class="menu-item--count">%s/%s</span>'):format(v.Title, Collected, Total),
+            label = ("%s: <span style='color: green;'>%s/%s</span>"):format(v.Title, Collected, Total),
             value = v.ID,
             title = v.Title,
             total = Total,
@@ -260,8 +260,8 @@ function OpenMenu()
                 title = ('%s (%s)'):format(data.current.title, data.current.total),
                 align = Config.MenuPosition,
                 elements = {
-                    {label = ('%s <span class="menu-item--count">%s</span>'):format('Collected', data.current.collected),  value = 'collected'},
-                    {label = "<span class='menu-item--danger'>Reset Progress</span>",  value = 'reset'},
+                    {label = ("%s: <span style='color: green;'>%s</span>"):format('Collected', data.current.collected),  value = 'collected'},
+                    {label = ("<span style='color: red;'>%s</span>"):format(_U('menu_reset')),  value = 'reset'},
             }}, function(data2, menu2)
                 if data2.current.value == 'reset' then
                     ESX.UI.Menu.Open('default', Resource, data2.current.value, {
@@ -269,7 +269,7 @@ function OpenMenu()
                         align       = Config.MenuPosition,
                         elements    = {
                                         {label = _U('menu_no'),  value = 'no'},
-                                        {label = ("<span class='menu-item--danger'>%s</span>"):format(_U('menu_yes')), value = 'yes'}
+                                        {label = ("<span style='color: red;'>%s</span>"):format(_U('menu_yes')), value = 'yes'}
                                     }
                     }, function(data3, menu3)
                         if data3.current.value == 'yes' then
