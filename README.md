@@ -36,6 +36,7 @@ Players can be rewarded with cash for finding each collectable and for finding a
 Config.Collectables = {
     LetterScraps = {
         Enabled = true,
+        Title = "Letter Scraps",
         ID = 'letter_scraps',
         Prop = 'prop_ld_scrap',      
         Rewards = {
@@ -66,6 +67,7 @@ Both events have 3 parameters:
 ```lua
 {
     ID = string / integer       -- the item ID defined in the config
+    Title = string              -- the item title
     Collected = boolean,        -- Has the item been collected?
     InRange = boolean,          -- Is the item in range for the player?
     Spawned = boolean,          -- Is the item spawned?
@@ -96,6 +98,7 @@ ALTER TABLE user_collectables ADD lost_spanners TEXT NOT NULL;
 ```lua
 LostSpanners = {
     Enabled = true,                                     -- enable / disable the collectables
+    Title = "Lost Spanners",                            -- The title of the collectable
     ID = 'lost_spanners',                               -- the ID used for the MySQL database column
     Prop = 'prop_tool_adjspanner',                      -- the prop to spawn for the player to collect
     Rewards = {

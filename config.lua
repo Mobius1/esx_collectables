@@ -13,6 +13,7 @@ Config.MenuPosition = 'top-left'
 Config.Collectables = {
     LetterScraps = {
         Enabled = true,
+        Title = "Letter Scraps",
         ID = 'letter_scraps',
         Prop = 'prop_ld_scrap',
         Blip = {
@@ -76,6 +77,7 @@ Config.Collectables = {
 
     SpaceshipParts = {
         Enabled = true,
+        Title = "Spaceship Parts",
         ID = 'spaceship_parts',
         Prop = 'prop_power_cell',
         Blip = {
@@ -139,6 +141,7 @@ Config.Collectables = {
 
     HiddenPackages = {
         Enabled = true,
+        Title = "Hidden Packages",
         ID = 'hidden_packages',
         Prop = 'prop_security_case_01',
         Blip = {
@@ -165,6 +168,7 @@ Config.Collectables = {
 
     NuclearWaste = {
         Enabled = true,
+        Title = "Nuclear Waste",
         ID = 'nuclear_waste',
         Prop = 'prop_rad_waste_barrel_01',
         Blip = {
@@ -208,6 +212,7 @@ Config.Collectables = {
 
     SubParts = {
         Enabled = true,
+        Title = "Submarine Parts",
         ID = 'sub_parts',
         Prop = 'prop_sub_chunk_01',
         Blip = {
@@ -251,6 +256,7 @@ Config.Collectables = {
 
     EpsilonTracts = {
         Enabled = true,
+        Title = "Epsilon Tracts",
         ID = 'epsilon_tracts',
         Prop = 'prop_time_capsule_01',
         Blip = {

@@ -67,7 +67,9 @@ function SetCollected(Type, _Collected)
             Collectables[Type].Completed = true
         end
             
-        Collectables[Type].Title = SnakeToWord(Collectables[Type].ID)
+        if Collectables[Type].Title == nil then
+            Collectables[Type].Title = SnakeToWord(Collectables[Type].ID)
+        end
         Collectables[Type].Collected = Collected
     end
 end
