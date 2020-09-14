@@ -314,7 +314,7 @@ function OpenMenu()
                                     -- Reset collectables
                                     for k, v in pairs(Collectables) do
                                         if v.ID == data.current.value then
-                                            v.Collected = false
+                                            v.Collected = {}
                                             v.Completed = false
 
                                             local ItemsCount = #v.Items
