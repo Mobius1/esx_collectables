@@ -19,26 +19,17 @@ Citizen.CreateThread(function()
     PlayerData = ESX.GetPlayerData()
 
     InitCollectables()
+    
 end)
 
 -- Update player coords
 Citizen.CreateThread(function()
-    local delay = 100
-
-    if Config.Debug then
-        delay = 0
-    end
-
     while true do
         if Ready then
             Player.Ped = PlayerPedId()
             Player.Pos = GetEntityCoords(Player.Ped)
-
-            if Config.Debug then
-                RenderDebugHud(Collectables)
-            end
         end
-        Citizen.Wait(delay)
+        Citizen.Wait(100)
     end
 end)
 
@@ -72,7 +63,7 @@ Citizen.CreateThread(function()
                 end
             end
         end
-        Citizen.Wait(5000)
+        Citizen.Wait(1000)
     end
 end)
 
@@ -99,8 +90,37 @@ function EnableCollectable(Type)
 
                         -- Only do checks if player is in range
                         if dist < Config.DrawDistance then
+
+                            if Config.Debug then
+                                ESX.Game.Utils.DrawText3D(vector3(
+                                    Item.Pos.x, 
+                                    Item.Pos.y, 
+                                    Item.Pos.z + 1.0),
+                                    Collectables[Type].Title .. ": " .. Item.ID,
+                                    1.5
+                                )
+
+                                DrawMarker(
+                                    0, 
+                                    Item.Pos.x, 
+                                    Item.Pos.y, 
+                                    Item.Pos.z + 1.0, 
+                                    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                                    1.0, 
+                                    1.0, 
+                                    1.0, 
+                                    238, 
+                                    238, 
+                                    0, 
+                                    255, 
+                                    true, 
+                                    true, 
+                                    2
+                                )       
+                            end                     
+
                             -- Only do collisions check if player is really close to collectable
-                            if dist < 1 then
+                            if dist < 1.0 then
                                 -- Trigger collection
                                 CollectItem(Item, Type)
                             end               
@@ -137,10 +157,20 @@ function SpawnItem(item, prop)
     item.Collected = false
 
     ESX.Game.SpawnLocalObject(prop, item.Pos, function(entity)
+
+        RequestCollisionAtCoord(item.Pos.x, item.Pos.y, item.Pos.z)
+
+        while not HasCollisionLoadedAroundEntity(entity) do
+            RequestCollisionAtCoord(item.Pos.x, item.Pos.y, item.Pos.z)
+            Citizen.Wait(0)
+        end
+
         if Config.PlaceCollectables and item.Fixed == nil then
             PlaceObjectOnGroundProperly(entity)
         end
+
         FreezeEntityPosition(entity, true)
+        SetEntityCollision(entity, false, true)
     
         item.Entity = entity
     end)
@@ -281,11 +311,23 @@ function OpenMenu()
                                         ESX.ShowNotification(_U('money_removed', total))
                                     end
 
-                                    ESX.UI.Menu.CloseAll()
+                                    -- Reset collectables
+                                    for k, v in pairs(Collectables) do
+                                        if v.ID == data.current.value then
+                                            v.Collected = false
+                                            v.Completed = false
 
-                                    RemoveItems()
-                                    Wait(500)
-                                    InitCollectables()	
+                                            local ItemsCount = #v.Items
+                                            for i = 1, ItemsCount do
+                                                local Item = v.Items[i]
+                                                Item.Collected = false
+                                            end
+                                        end
+                                    end
+
+                                    EnableCollectable(data.current.type)
+
+                                    ESX.UI.Menu.CloseAll()
                                 end
                             end, Collectables[data.current.type])
                         end
