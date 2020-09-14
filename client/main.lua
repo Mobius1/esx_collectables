@@ -233,6 +233,25 @@ function CollectItem(item, type)
     end, item, type, Collectable)
 end
 
+-- Reset Collectables
+function ResetCollectables(ID, cb)
+    for k, v in pairs(Collectables) do
+        if v.ID == ID then
+            v.Collected = {}
+            v.Completed = false
+    
+            local ItemsCount = #v.Items
+            for i = 1, ItemsCount do
+                local Item = v.Items[i]
+                Item.Collected = false
+            end
+        end
+    end 
+    
+    if cb ~= nil then
+        cb()
+    end
+end
 
 -- Remove spawned items
 function RemoveItems()
@@ -307,27 +326,27 @@ function OpenMenu()
                         if data3.current.value == 'yes' then
                             ESX.TriggerServerCallback('esx_collectables:reset', function(success, total)
                                 if success then
-                                    if total > 0 then
-                                        ESX.ShowNotification(_U('money_removed', total))
-                                    end
-
-                                    -- Reset collectables
-                                    for k, v in pairs(Collectables) do
-                                        if v.ID == data.current.value then
-                                            v.Collected = {}
-                                            v.Completed = false
-
-                                            local ItemsCount = #v.Items
-                                            for i = 1, ItemsCount do
-                                                local Item = v.Items[i]
-                                                Item.Collected = false
-                                            end
-                                        end
-                                    end
-
-                                    EnableCollectable(data.current.type)
-
                                     ESX.UI.Menu.CloseAll()
+    
+                                    AddTextEntry("CUSTOMLOADSTR", _U('resetting_msg', data.current.title))
+    
+                                    Citizen.CreateThread(function()
+                                        BeginTextCommandBusyspinnerOn("CUSTOMLOADSTR")
+                                        EndTextCommandBusyspinnerOn(4)
+        
+                                        -- Reset collectables
+                                        ResetCollectables(data.current.value, function()
+                                            Citizen.Wait(1000)
+    
+                                            ESX.ShowNotification(_U('reset_msg', data.current.title))
+    
+                                            if total > 0 then
+                                                ESX.ShowNotification(_U('money_removed', total))
+                                            end
+    
+                                            BusyspinnerOff()
+                                        end)
+                                    end)         
                                 end
                             end, Collectables[data.current.type])
                         end
@@ -346,6 +365,7 @@ function OpenMenu()
         end
     )
 end
+
 
 -- Restart
 AddEventHandler('onResourceStart', function(resource)
