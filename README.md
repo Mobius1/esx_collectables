@@ -41,7 +41,7 @@ Config.Collectables = {
         Prop = 'prop_ld_scrap',      
         Rewards = {
             PerItem = 50,           -- Cash reward per item found
-            Completed = 50000        -- Cash reward for all items found
+            Completed = 50000       -- Cash reward for all items found
         },
         ...
     }
@@ -133,10 +133,10 @@ A list of Blip IDs can be found [here](https://wiki.gtanet.work/index.php?title=
 To reduce load, the package only renders the collectable and performs any logic on it when it is in range of the player. You can adjust the range with `Config.DrawDistance` in `config.lua`. Default is `50`. NOTE: If you have the draw distance set at a high value then items may not spawn on the surface they're supposed to on due to collisions not being loaded at great distances.
 
 ## Development Options
-Setting `Config.Debug` to `true` renders blips to show the location of collectables and render some debug text to the screen to help with development. The package is written to allow it to be restarted properly with `restart esx_collectables` in the console.
+Setting `Config.Debug` to `true` renders blips on the map to show the location of collectables as well as markers to aid placement. The package is written to allow it to be restarted properly with `restart esx_collectables` in the console.
 
-##### Debug Data:
-![Demo Image 2](https://i.imgur.com/oaqJkTJ.jpg)
+##### Debug Marker:
+![Demo Image 2](https://i.imgur.com/zUJ3osE.jpg)
 
 ##### Debug Blips:
 ![Demo Image 3](https://i.imgur.com/w3HRRPn.jpg)
@@ -149,7 +149,10 @@ Setting `Config.Debug` to `true` renders blips to show the location of collectab
 Pull requests welcome.
 
 ## To Do
-* Add UI menu to allow players to check progress of collectables
+- [x] ~~Add UI menu to allow players to check progress of collectables~~
+- [ ] Remove ESX dependency
+- [ ] Prevent money exploits
+- [ ] Allow reward callbacks as an option instead of just cash values
 
 ## Legal
 
