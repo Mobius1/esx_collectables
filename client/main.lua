@@ -19,7 +19,7 @@ Citizen.CreateThread(function()
     PlayerData = ESX.GetPlayerData()
 
     InitCollectables()
-    
+
 end)
 
 -- Update player coords
@@ -50,14 +50,14 @@ Citizen.CreateThread(function()
                         -- Add debug blip
                         if Config.Debug and not Item.Blip then
                             AddDebugBlip(Item, v.Blip, v.Title)
-                        end                       
+                        end
 
-                        local dist = #(Item.Pos - Player.Pos)                     
+                        local dist = #(Item.Pos - Player.Pos)
 
                         -- Add item to active table
                         if dist < Config.DrawDistance then
                             Item.InRange = true
-                            table.insert(Active[k], Item)       
+                            table.insert(Active[k], Item)
                         end
                     end
                 end
@@ -81,49 +81,49 @@ function EnableCollectable(Type)
                     local Item = Collection[i]
 
                     if not Item.Collected then
-                        local dist = #(Item.Pos - Player.Pos) 
+                        local dist = #(Item.Pos - Player.Pos)
 
                         -- spawn entity when player is in range
                         if not Item.Spawned then
                             SpawnItem(Item, Collectables[Type].Prop)
-                        end                            
+                        end
 
                         -- Only do checks if player is in range
                         if dist < Config.DrawDistance then
 
                             if Config.Debug then
                                 ESX.Game.Utils.DrawText3D(vector3(
-                                    Item.Pos.x, 
-                                    Item.Pos.y, 
+                                    Item.Pos.x,
+                                    Item.Pos.y,
                                     Item.Pos.z + 1.0),
-                                    Collectables[Type].Title .. ": " .. Item.ID,
-                                    1.5
+                                Collectables[Type].Title .. ": " .. Item.ID,
+                                1.5
                                 )
 
                                 DrawMarker(
-                                    0, 
-                                    Item.Pos.x, 
-                                    Item.Pos.y, 
-                                    Item.Pos.z + 1.0, 
-                                    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
-                                    1.0, 
-                                    1.0, 
-                                    1.0, 
-                                    238, 
-                                    238, 
-                                    0, 
-                                    255, 
-                                    true, 
-                                    true, 
+                                    0,
+                                    Item.Pos.x,
+                                    Item.Pos.y,
+                                    Item.Pos.z + 1.0,
+                                    0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    238,
+                                    238,
+                                    0,
+                                    255,
+                                    true,
+                                    true,
                                     2
-                                )       
-                            end                     
+                                )
+                            end
 
                             -- Only do collisions check if player is really close to collectable
                             if dist < 1.0 then
                                 -- Trigger collection
                                 CollectItem(Item, Type)
-                            end               
+                            end
                         end
                     end
                 end
@@ -158,21 +158,21 @@ function SpawnItem(item, prop)
 
     ESX.Game.SpawnLocalObject(prop, item.Pos, function(entity)
 
-        RequestCollisionAtCoord(item.Pos.x, item.Pos.y, item.Pos.z)
-
-        while not HasCollisionLoadedAroundEntity(entity) do
             RequestCollisionAtCoord(item.Pos.x, item.Pos.y, item.Pos.z)
-            Citizen.Wait(0)
-        end
 
-        if Config.PlaceCollectables and item.Fixed == nil then
-            PlaceObjectOnGroundProperly(entity)
-        end
+            while not HasCollisionLoadedAroundEntity(entity) do
+                RequestCollisionAtCoord(item.Pos.x, item.Pos.y, item.Pos.z)
+                Citizen.Wait(0)
+            end
 
-        FreezeEntityPosition(entity, true)
-        SetEntityCollision(entity, false, true)
-    
-        item.Entity = entity
+            if Config.PlaceCollectables and item.Fixed == nil then
+                PlaceObjectOnGroundProperly(entity)
+            end
+
+            FreezeEntityPosition(entity, true)
+            SetEntityCollision(entity, false, true)
+
+            item.Entity = entity
     end)
 end
 
@@ -186,10 +186,10 @@ function DespawnItem(item)
             RemoveBlip(item.Blip)
             item.Blip = nil
         end
-    end    
+    end
 
-    item.Spawned = false    
-    item.InRange = false    
+    item.Spawned = false
+    item.InRange = false
 end
 
 -- Trigger player collected item
@@ -211,7 +211,7 @@ function CollectItem(item, type)
 
             -- play sound
             PlaySoundFrontend(-1, "PICK_UP", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-        
+
             -- show notification
             if Collectable.Completed then
                 ESX.Scaleform.ShowFreemodeMessage(
@@ -224,7 +224,7 @@ function CollectItem(item, type)
                     _U('found_title', Collectable.Title),
                     _U('found_msg', #Collectable.Collected, #Collectable.Items, Collectable.Title),
                     3
-                ) 
+                )
             end
         else
             -- there was a problem so respawn item
@@ -239,15 +239,15 @@ function ResetCollectables(ID, cb)
         if v.ID == ID then
             v.Collected = {}
             v.Completed = false
-    
+
             local ItemsCount = #v.Items
             for i = 1, ItemsCount do
                 local Item = v.Items[i]
                 Item.Collected = false
             end
         end
-    end 
-    
+    end
+
     if cb ~= nil then
         cb()
     end
@@ -258,12 +258,12 @@ function RemoveItems()
     for k, v in pairs(Collectables) do
         for i = 1, #Collectables[k].Items do
             local Item = Collectables[k].Items[i]
-                            
+
             if not Item.Collected and Item.Entity then
-                DespawnItem(Item)            
+                DespawnItem(Item)
             end
-        end   
-    end 
+        end
+    end
 end
 
 -- Menu thread
@@ -283,7 +283,20 @@ function OpenMenu()
     local Resource = GetCurrentResourceName()
     local Elements = {}
 
-    for k, v in pairs(Collectables) do
+    local list = {}
+    for name,value in pairs(Collectables) do
+        list[#list+1] = name
+    end
+
+    function SortByTitle(a,b)
+        return Collectables[a].Title < Collectables[b].Title
+    end
+
+    -- Sort collectable list by title
+    table.sort(list, SortByTitle)
+
+    for k=1,#list do
+        local v = Collectables[list[k]]
         local Total = #v.Items
         local Collected = #v.Collected
         table.insert(Elements,  {
@@ -292,7 +305,7 @@ function OpenMenu()
             title = v.Title,
             total = Total,
             collected = Collected,
-            type = k
+            type = list[k]
         })
     end
 
