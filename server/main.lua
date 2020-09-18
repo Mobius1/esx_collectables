@@ -103,7 +103,7 @@ ESX.RegisterServerCallback('esx_collectables:collected', function(source, cb, Co
             if Rewards then
                 RewardPlayer(xPlayer, Config.Collectables[Type].Rewards.Completed)
             end
-            TriggerEvent("esCollectables:completed", source, xPlayer, Collectable, Group)
+            TriggerEvent("esx_collectables:completed", source, xPlayer, Collectable, Group)
         end
 
         cb(true, Type, Completed)
