@@ -172,6 +172,8 @@ function SpawnItem(item, prop)
 
         FreezeEntityPosition(entity, true)
         SetEntityCollision(entity, false, true)
+        SetModelAsNoLongerNeeded(GetHashKey(prop))
+        SetEntityAsMissionEntity(entity)
 
         item.Entity = entity
     end)
