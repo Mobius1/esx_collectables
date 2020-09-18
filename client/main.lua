@@ -27,8 +27,9 @@ Citizen.CreateThread(function()
     while true do
         if Ready then
             Player.Ped = PlayerPedId()
-            Player.Pos = GetEntityCoords(Player.Ped)
+            Player.Pos = GetEntityCoords(Player.Ped)          
         end
+
         Citizen.Wait(100)
     end
 end)
@@ -158,21 +159,21 @@ function SpawnItem(item, prop)
 
     ESX.Game.SpawnLocalObject(prop, item.Pos, function(entity)
 
+        RequestCollisionAtCoord(item.Pos.x, item.Pos.y, item.Pos.z)
+
+        while not HasCollisionLoadedAroundEntity(entity) do
             RequestCollisionAtCoord(item.Pos.x, item.Pos.y, item.Pos.z)
+            Citizen.Wait(0)
+        end
 
-            while not HasCollisionLoadedAroundEntity(entity) do
-                RequestCollisionAtCoord(item.Pos.x, item.Pos.y, item.Pos.z)
-                Citizen.Wait(0)
-            end
+        if Config.PlaceCollectables and item.Fixed == nil then
+            PlaceObjectOnGroundProperly(entity)
+        end
 
-            if Config.PlaceCollectables and item.Fixed == nil then
-                PlaceObjectOnGroundProperly(entity)
-            end
+        FreezeEntityPosition(entity, true)
+        SetEntityCollision(entity, false, true)
 
-            FreezeEntityPosition(entity, true)
-            SetEntityCollision(entity, false, true)
-
-            item.Entity = entity
+        item.Entity = entity
     end)
 end
 
