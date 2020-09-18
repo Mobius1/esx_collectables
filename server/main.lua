@@ -75,8 +75,7 @@ function SetCollected(Type, _Collected)
 end
 
 ESX.RegisterServerCallback('esx_collectables:collected', function(source, cb, Collectable, Type, Group)
-    local _source = source
-    local xPlayer = ESX.GetPlayerFromId(_source)
+    local xPlayer = ESX.GetPlayerFromId(source)
 
     MySQL.Async.execute('UPDATE user_collectables SET ' .. Group.ID .. ' = @group WHERE identifier = @identifier', {
         ['@identifier'] = xPlayer.identifier,
@@ -95,16 +94,16 @@ ESX.RegisterServerCallback('esx_collectables:collected', function(source, cb, Co
         end
 
         if Rewards then
-            RewardPlayer(_source, xPlayer, Config.Collectables[Type].Rewards.PerItem)
+            RewardPlayer(xPlayer, Config.Collectables[Type].Rewards.PerItem)
         end
 
-        TriggerEvent("esx_collectables:itemCollected", Collectable, Group)
+        TriggerEvent("esx_collectables:itemCollected", xPlayer, Collectable, Group)
 
         if Completed then
             if Rewards then
                 RewardPlayer(xPlayer, Config.Collectables[Type].Rewards.Completed)
             end
-            TriggerEvent("esx_collectables:completed", Collectable, Group)
+            TriggerEvent("esx_collectables:completed", source, xPlayer, Collectable, Group)
         end
 
         cb(true, Type, Completed)
@@ -143,7 +142,7 @@ ESX.RegisterServerCallback('esx_collectables:reset', function(source, cb, group)
             end
         end
 
-        TriggerEvent("esx_collectables:resetProgress", Collectable, Group, Total)
+        TriggerEvent("esx_collectables:resetProgress", xPlayer, Collectable, Group, Total)
 
         cb(true, Total)
     end)
