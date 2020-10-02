@@ -49,14 +49,14 @@ Config.Collectables = {
 }
 ```
 
-## Available Server Events
+## Available Client Events
 
 ```lua
 AddEventHandler('esx_collectables:itemCollected', function(collectable, group)
     -- do something when player picks up collectable
 end)
 
-AddEventHandler('esx_collectables:completed', function(collectable, group)
+AddEventHandler('esx_collectables:questCompleted', function(group)
     -- do something when player has found all collectables in the group
 end)
 ```
