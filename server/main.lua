@@ -97,13 +97,10 @@ ESX.RegisterServerCallback('esx_collectables:collected', function(source, cb, Co
             RewardPlayer(xPlayer, Config.Collectables[Type].Rewards.PerItem)
         end
 
-        TriggerEvent("esx_collectables:itemCollected", xPlayer, Collectable, Group)
-
         if Completed then
             if Rewards then
                 RewardPlayer(xPlayer, Config.Collectables[Type].Rewards.Completed)
             end
-            TriggerEvent("esx_collectables:completed", source, xPlayer, Collectable, Group)
         end
 
         cb(true, Type, Completed)
@@ -141,8 +138,6 @@ ESX.RegisterServerCallback('esx_collectables:reset', function(source, cb, group)
                 end
             end
         end
-
-        TriggerEvent("esx_collectables:resetProgress", xPlayer, Collectable, Group, Total)
 
         cb(true, Total)
     end)

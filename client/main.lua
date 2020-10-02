@@ -93,31 +93,8 @@ function EnableCollectable(Type)
                         if dist < Config.DrawDistance then
 
                             if Config.Debug then
-                                ESX.Game.Utils.DrawText3D(vector3(
-                                    Item.Pos.x,
-                                    Item.Pos.y,
-                                    Item.Pos.z + 1.0),
-                                Collectables[Type].Title .. ": " .. Item.ID,
-                                1.5
-                                )
-
-                                DrawMarker(
-                                    0,
-                                    Item.Pos.x,
-                                    Item.Pos.y,
-                                    Item.Pos.z + 1.0,
-                                    0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    238,
-                                    238,
-                                    0,
-                                    255,
-                                    true,
-                                    true,
-                                    2
-                                )
+                                ESX.Game.Utils.DrawText3D(vector3(Item.Pos.x, Item.Pos.y, Item.Pos.z + 1.0), Collectables[Type].Title .. ": " .. Item.ID, 1.5)
+                                DrawMarker( 0, Item.Pos.x, Item.Pos.y, Item.Pos.z + 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 238, 238, 0, 255, true, true, 2)
                             end
 
                             -- Only do collisions check if player is really close to collectable
@@ -222,12 +199,16 @@ function CollectItem(item, type)
                     _U('completed_msg', #Collectable.Items, Collectable.Title),
                     3
                 )
+
+                TriggerEvent("esx_collectables:questCompleted", _type)
             else
                 ESX.Scaleform.ShowFreemodeMessage(
                     _U('found_title', Collectable.Title),
                     _U('found_msg', #Collectable.Collected, #Collectable.Items, Collectable.Title),
                     3
                 )
+
+                TriggerEvent("esx_collectables:itemCollected", item, _type)
             end
         else
             -- there was a problem so respawn item
