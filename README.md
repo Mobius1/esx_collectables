@@ -1,6 +1,8 @@
 # esx_collectables
 Enable collectable items on an ESX-enabled FiveM server. 
 
+ARCHIVED. See [`collectathon`](https://github.com/Mobius1/collectathon) for a framework agnostic version. Completely rewritten with major optimization, fixes and new additions.
+
 ![Demo Image 1](https://i.imgur.com/f1nD7Ap.gif)
 
 ## Features
